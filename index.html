@@ -1,19 +1,20 @@
-<html>
+<html ng-app="CalculatorApp">
 
 <head>
     <meta charset="UTF-8">
     <title>Calculator</title>
     <link rel="stylesheet" href="style.css" media="screen" type="text/css" />
+
 </head>
 
 <body>
 
-    <div id="calculator_panel">
+    <div id="calculator_panel" ng-controller="CalculatorController">
         <table>
             <!--table of 6 columns and 5 rows of buttons plus one row of display-->
             <tr>
                 <td colspan="6"> <!-- display row -->
-                    <input type="text" class="display_text" id="display" value="" />
+                    <input type="text" class="display_text" id="display" value="" ng-model="usr_input"/>
                 </td>
             </tr>
 
@@ -21,54 +22,56 @@
             <tr>
                 <td><input type="button" name="operator" class="op_btn" value="..." /></td>
                 <td><input type="button" name="operator" class="op_btn" value="..." /></td>
-                <td><input type="button" name="operator" class="op_btn" value="..." /></td>
-                <td><input type="button" name="operator" class="op_btn" value="..." /></td>
-                <td><input type="button" name="operator" class="op_btn" value="..." /></td>
-                <td><input type="button" name="operator" class="op_btn" value="..." /></td>
+                <td><input type="button" name="operator" class="op_btn" value="^" /></td>
+                <td><input type="button" name="operator" class="op_btn" value="√" /></td>
+                <td><input type="button" name="operator" class="op_btn" value="CE" ng-click="backspace()"/></td>
+                <td><input type="button" name="operator" class="op_btn" value="AC" ng-click="clear_input()"/></td>
             </tr>
 
             <!--second btn row -->
             <tr>
-                <td><input type="button" name="operator" class="op_btn" value="..." /></td>
-                <td><input type="button" name="operator" class="op_btn" value="..." /></td>
-                <td><input type="button" name="operator" class="op_btn" value="..." /></td>
-                <td><input type="button" name="operator" class="op_btn" value="..." /></td>
-                <td><input type="button" name="operator" class="op_btn" value="..." /></td>
-                <td><input type="button" name="operator" class="op_btn" value="..." /></td>
+                <td><input type="button" name="operator" class="op_btn" value="log" /></td>
+                <td><input type="button" name="operator" class="op_btn" value="ln" /></td>
+                <td><input type="button" name="operator" class="op_btn" value="7" ng-click="gather_input('7')"/></td>
+                <td><input type="button" name="operator" class="op_btn" value="8" ng-click="gather_input('8')"/></td>
+                <td><input type="button" name="operator" class="op_btn" value="9" ng-click="gather_input('9')"/></td>
+                <td><input type="button" name="operator" class="op_btn" value="÷" /></td>
             </tr>
 
             <!--third btn row-->
             <tr>
-                <td><input type="button" name="operator" class="op_btn" value="..." /></td>
-                <td><input type="button" name="operator" class="op_btn" value="..." /></td>
-                <td><input type="button" name="operator" class="op_btn" value="..." /></td>
-                <td><input type="button" name="operator" class="op_btn" value="..." /></td>
-                <td><input type="button" name="operator" class="op_btn" value="..." /></td>
-                <td><input type="button" name="operator" class="op_btn" value="..." /></td>
+                <td><input type="button" name="operator" class="op_btn" value="asin" /></td>
+                <td><input type="button" name="operator" class="op_btn" value="sin" /></td>
+                <td><input type="button" name="operator" class="op_btn" value="4" ng-click="gather_input('4')"/></td>
+                <td><input type="button" name="operator" class="op_btn" value="5" ng-click="gather_input('5')"/></td>
+                <td><input type="button" name="operator" class="op_btn" value="6" ng-click="gather_input('6')"/></td>
+                <td><input type="button" name="operator" class="op_btn" value="×" /></td>
             </tr>
 
             <!--fourth btn row-->
             <tr>
-                <td><input type="button" name="operator" class="op_btn" value="..." /></td>
-                <td><input type="button" name="operator" class="op_btn" value="..." /></td>
-                <td><input type="button" name="operator" class="op_btn" value="..." /></td>
-                <td><input type="button" name="operator" class="op_btn" value="..." /></td>
-                <td><input type="button" name="operator" class="op_btn" value="..." /></td>
-                <td><input type="button" name="operator" class="op_btn" value="..." /></td>
+                <td><input type="button" name="operator" class="op_btn" value="acos" /></td>
+                <td><input type="button" name="operator" class="op_btn" value="cos" /></td>
+                <td><input type="button" name="operator" class="op_btn" value="1" ng-click="gather_input('1')"/></td>
+                <td><input type="button" name="operator" class="op_btn" value="2" ng-click="gather_input('2')"/></td>
+                <td><input type="button" name="operator" class="op_btn" value="3" ng-click="gather_input('3')"/></td>
+                <td><input type="button" name="operator" class="op_btn" value="-" /></td>
             </tr>
 
             <!--fifth btn row-->
             <tr>
-                <td><input type="button" name="operator" class="op_btn" value="..." /></td>
-                <td><input type="button" name="operator" class="op_btn" value="..." /></td>
-                <td><input type="button" name="operator" class="op_btn" value="..." /></td>
-                <td><input type="button" name="operator" class="op_btn" value="..." /></td>
-                <td><input type="button" name="operator" class="op_btn" value="..." /></td>
-                <td><input type="button" name="operator" class="op_btn" value="..." /></td>
+                <td><input type="button" name="operator" class="op_btn" value="atan" /></td>
+                <td><input type="button" name="operator" class="op_btn" value="tan" /></td>
+                <td><input type="button" name="operator" class="op_btn" value="0" /></td>
+                <td><input type="button" name="operator" class="op_btn" value="." /></td>
+                <td><input type="button" name="operator" class="op_btn" value="=" /></td>
+                <td><input type="button" name="operator" class="op_btn" value="+" /></td>
             </tr>
         </table>
     </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.5/angular.min.js" type="text/javascript"></script>
+<script src="controller.js" type="text/javascript"></script>
 </body>
 
 </html>
