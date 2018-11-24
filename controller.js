@@ -15,4 +15,11 @@ angular.module('CalculatorApp',[])
         $scope.backspace = function(){
             $scope.usr_input = $scope.usr_input.substr(0, $scope.usr_input.length-1);
         }
+
+        $scope.evaluate = function(){
+            //evaluate the current mathematical expression based on the usr_input
+            var result = eval($scope.usr_input);
+            console.log(result);
+            $scope.usr_input = result;
+        }
     }]);

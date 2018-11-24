@@ -7,12 +7,17 @@ describe('CalculatorController', function() {
     beforeEach(inject(function(_$rootScope_, _$controller_){
         $rootScope = _$rootScope_;
         $scope = $rootScope.$new();
-        $controller = _$controller_;
 
+        $controller = _$controller_;
         calculatorController = $controller('CalculatorController', {'$rootScope' : $rootScope, '$scope': $scope});
     }));
 
     it('controller exist', function() {
         expect(calculatorController).toBeDefined();
     });
+
+    it('$scope.usr_input', function(){
+        expect($scope.usr_input).toEqual('');
+    });
+
 });
