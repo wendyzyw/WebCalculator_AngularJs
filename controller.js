@@ -3,9 +3,13 @@
 const NUM1 = 0;
 const OP = 1;
 const NUM2 = 2;
+const NUM_VALIDATOR = /^[0-9]+[.]?[0-9]*$/;
 
 angular.module('CalculatorApp',[])
     .controller('CalculatorController', ['$scope', function($scope){
+        // this array can be extended to include operations such as: trigonomitric, log, ln
+        $scope.unary_ops = ['√'];
+
         //keep track of the entire mathematical expression
         $scope.expression = '';
         //keep track of the current number/operation that user is entering
@@ -18,48 +22,50 @@ angular.module('CalculatorApp',[])
         $scope.evaluated = false;
 
         $scope.gather_input = function(input){
-            if ($scope.evaluated){
-                $scope.state = NUM1;
-                $scope.evaluated = false;
+            if (number_validation(input)) {
+                if ($scope.evaluated) {
+                    $scope.state = NUM1;
+                    $scope.evaluated = false;
 
-                $scope.expression = '' + input;
-                $scope.exp_json.num1 += input;
-                $scope.current_input = $scope.exp_json.num1;
-            } else {
-                if ($scope.state === NUM1){
-                    $scope.expression += input;
+                    $scope.expression = '' + input;
                     $scope.exp_json.num1 += input;
                     $scope.current_input = $scope.exp_json.num1;
-                } else if ($scope.state === NUM2) {
-                    $scope.expression += input;
-                    $scope.exp_json.num2 += input;
-                    $scope.current_input = $scope.exp_json.num2;
+                } else {
+                    if ($scope.state === NUM1) {
+                        $scope.expression += input;
+                        $scope.exp_json.num1 += input;
+                        $scope.current_input = $scope.exp_json.num1;
+                    } else if ($scope.state === NUM2) {
+                        $scope.expression += input;
+                        $scope.exp_json.num2 += input;
+                        $scope.current_input = $scope.exp_json.num2;
+                    }
                 }
             }
         }
 
         $scope.set_op = function(input){
-            if (!$scope.evaluated) {
-                if (input === '/') {
-                    $scope.expression += '÷';
-                } else if (input === '*') {
-                    $scope.expression += '×';
-                } else {
-                    $scope.expression += input;
+            if ($scope.exp_json.op === '') {
+                if (!$scope.evaluated) {
+                    if (input === '/') {
+                        $scope.expression += '÷';
+                    } else if (input === '*') {
+                        $scope.expression += '×';
+                    } else {
+                        $scope.expression += input;
+                    }
+                    $scope.exp_json.op = input;
+                    $scope.current_input = $scope.exp_json.op;
+                    //set state to num2
+                    $scope.state = NUM2
+
+                } else if ($scope.evaluated && $scope.unary_ops.includes(input, 0)) {
+                    $scope.evaluated = false;
+                    $scope.expression = '' + input;
+                    $scope.exp_json.op = input;
+                    $scope.current_input = $scope.exp_json.op;
+                    $scope.state = NUM2;
                 }
-                $scope.exp_json.op = input;
-                $scope.current_input = $scope.exp_json.op;
-                //set state to num2
-                $scope.state = NUM2
-
-            } else if ($scope.evaluated && input === '√'){
-                $scope.evaluated = false;
-                $scope.expression = '' + input;
-                $scope.exp_json.op = input;
-                $scope.current_input = $scope.exp_json.op;
-                $scope.state = NUM2;
-            } else {
-
             }
         }
 
@@ -86,21 +92,27 @@ angular.module('CalculatorApp',[])
         }
 
         $scope.evaluate = function(){
-            //evaluate the current mathematical expression based on the expression
-            var result = eval_exp_json($scope.exp_json);
+            if (!$scope.evaluated) {
+                //evaluate the current mathematical expression based on the expression
+                var result = eval_exp_json($scope.exp_json);
 
-            $scope.expression += ' = ' + result + ' ';
-            $scope.exp_json = {"num1": '', "num2": '', "op": ''};
-            $scope.current_input = result;
+                $scope.expression += ' = ' + result + ' ';
+                $scope.exp_json = {"num1": '', "num2": '', "op": ''};
+                $scope.current_input = result;
 
-            $scope.evaluated = true;
-            $scope.state = NUM1;
+                $scope.evaluated = true;
+                $scope.state = NUM1;
+            }
         }
 
     }]);
 
     function remove_last_char(str){
         return str.substr(0, str.length-1);
+    }
+
+    function number_validation(num_str){
+        return NUM_VALIDATOR.test(String(num_str).toLowerCase());
     }
 
 

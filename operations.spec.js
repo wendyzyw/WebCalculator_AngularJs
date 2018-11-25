@@ -16,8 +16,6 @@ describe('CalculatorController', function() {
         expect(calculatorController).toBeDefined();
     });
 
-    it('$scope.usr_input', function(){
-        expect($scope.usr_input).toEqual('');
-    });
+
 
 });
