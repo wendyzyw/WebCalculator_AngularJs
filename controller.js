@@ -26,12 +26,12 @@ angular.module('CalculatorApp',[])
                 $scope.exp_json.num1 += input;
                 $scope.current_input = $scope.exp_json.num1;
             } else {
-                $scope.expression += input;
-
                 if ($scope.state === NUM1){
+                    $scope.expression += input;
                     $scope.exp_json.num1 += input;
                     $scope.current_input = $scope.exp_json.num1;
                 } else if ($scope.state === NUM2) {
+                    $scope.expression += input;
                     $scope.exp_json.num2 += input;
                     $scope.current_input = $scope.exp_json.num2;
                 }
@@ -39,11 +39,28 @@ angular.module('CalculatorApp',[])
         }
 
         $scope.set_op = function(input){
-            $scope.expression += input;
-            $scope.exp_json.op = input;
-            $scope.current_input = $scope.exp_json.op;
-            //set state to num2
-            $scope.state = NUM2
+            if (!$scope.evaluated) {
+                if (input === '/') {
+                    $scope.expression += '÷';
+                } else if (input === '*') {
+                    $scope.expression += '×';
+                } else {
+                    $scope.expression += input;
+                }
+                $scope.exp_json.op = input;
+                $scope.current_input = $scope.exp_json.op;
+                //set state to num2
+                $scope.state = NUM2
+
+            } else if ($scope.evaluated && input === '√'){
+                $scope.evaluated = false;
+                $scope.expression = '' + input;
+                $scope.exp_json.op = input;
+                $scope.current_input = $scope.exp_json.op;
+                $scope.state = NUM2;
+            } else {
+
+            }
         }
 
         $scope.clear_input = function(){
@@ -80,42 +97,10 @@ angular.module('CalculatorApp',[])
             $scope.state = NUM1;
         }
 
-        function remove_last_char(str){
-            return str.substr(0, str.length-1);
-        }
-
-        // limit decimal places to handle javaScript float point precision problem
-        // for +/- the number of decimal places of resulting number is the larger dec place of any input number
-        // for * the number of decimal places of resulting number is the sum of dec place of both inputs
-        // for / all decimal places leave
-        function eval_exp_json(exp_json){
-            var num1 = Number(exp_json.num1);
-            var num2 = Number(exp_json.num2);
-            var dec1 = precision(num1);
-            var dec2 = precision(num2);
-            console.log("dec1: "+dec1+"- dec2: "+dec2);
-            var result;
-            var result_dec = (dec1 > dec2)?dec1 : dec2;
-
-            if (exp_json.op === '+'){
-                result = (num1 + num2).toFixed(result_dec);
-            } else if (exp_json.op === '-'){
-                result = (num1 - num2).toFixed(result_dec);
-            } else if (exp_json.op === '*'){
-                result = (num1 * num2).toFixed(dec1+dec2);
-            } else if (exp_json.op === '/'){
-                result = num1 / num2;
-            } else {
-                result = '';
-            }
-            return result;
-        }
-
-        // a helper function to calculate number of decimal places given a float point number
-        function precision(a) {
-            if (!isFinite(a)) return 0;
-            var e = 1, p = 0;
-            while (Math.round(a * e) / e !== a) { e *= 10; p++; }
-            return p;
-        }
     }]);
+
+    function remove_last_char(str){
+        return str.substr(0, str.length-1);
+    }
+
+

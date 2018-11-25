@@ -14,6 +14,14 @@ td {
     height: 15px;
 }
 
+.reset_operation {
+    background-color: dodgerblue !important;
+}
+
+.number {
+    background-color: orange !important;
+}
+
 .display_text {
     width: 100%;
     height: 50px;
