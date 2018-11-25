@@ -22,22 +22,28 @@ angular.module('CalculatorApp',[])
         $scope.evaluated = false;
 
         $scope.gather_input = function(input){
-            if (number_validation(input)) {
-                if ($scope.evaluated) {
-                    $scope.state = NUM1;
-                    $scope.evaluated = false;
+            if ($scope.evaluated) {
+                $scope.state = NUM1;
+                $scope.evaluated = false;
 
-                    $scope.expression = '' + input;
-                    $scope.exp_json.num1 += input;
-                    $scope.current_input = $scope.exp_json.num1;
-                } else {
-                    if ($scope.state === NUM1) {
+                $scope.expression = '' + input;
+                $scope.exp_json.num1 += input;
+                $scope.current_input = $scope.exp_json.num1;
+            } else {
+                if ($scope.state === NUM1) {
+                    var num_to_test = $scope.exp_json.num1 + input;
+                    if (number_validation(num_to_test)) {
+                        $scope.exp_json.num1 = num_to_test;
                         $scope.expression += input;
-                        $scope.exp_json.num1 += input;
                         $scope.current_input = $scope.exp_json.num1;
-                    } else if ($scope.state === NUM2) {
+                    } else {
+                        console.log("failed num validation for num1");
+                    }
+                } else if ($scope.state === NUM2) {
+                    var num_to_test = $scope.exp_json.num2 + input;
+                    if (number_validation(num_to_test)){
+                        $scope.exp_json.num2 = num_to_test;
                         $scope.expression += input;
-                        $scope.exp_json.num2 += input;
                         $scope.current_input = $scope.exp_json.num2;
                     }
                 }
@@ -94,11 +100,11 @@ angular.module('CalculatorApp',[])
         $scope.evaluate = function(){
             if (!$scope.evaluated) {
                 //evaluate the current mathematical expression based on the expression
-                var result = eval_exp_json($scope.exp_json);
+                $scope.result = eval_exp_json($scope.exp_json);
 
-                $scope.expression += ' = ' + result + ' ';
+                $scope.expression += ' = ' + $scope.result + ' ';
                 $scope.exp_json = {"num1": '', "num2": '', "op": ''};
-                $scope.current_input = result;
+                $scope.current_input = $scope.result;
 
                 $scope.evaluated = true;
                 $scope.state = NUM1;
@@ -112,7 +118,7 @@ angular.module('CalculatorApp',[])
     }
 
     function number_validation(num_str){
-        return NUM_VALIDATOR.test(String(num_str).toLowerCase());
+        return num_str === '' || NUM_VALIDATOR.test(String(num_str).toLowerCase());
     }
 
 
