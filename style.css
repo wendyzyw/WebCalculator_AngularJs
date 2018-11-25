@@ -10,6 +10,10 @@ td {
     text-align: center;
 }
 
+#expression {
+    height: 15px;
+}
+
 .display_text {
     width: 100%;
     height: 50px;

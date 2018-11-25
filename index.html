@@ -11,10 +11,16 @@
 
     <div id="calculator_panel" ng-controller="CalculatorController">
         <table>
+            <tr>
+                <td colspan="6">
+                    <p id="expression">{{expression}}</p>
+                </td>
+            </tr>
+
             <!--table of 6 columns and 5 rows of buttons plus one row of display-->
             <tr>
                 <td colspan="6"> <!-- display row -->
-                    <input type="text" class="display_text" id="display" value="" ng-model="usr_input"/>
+                    <input type="text" class="display_text" id="display" value="" ng-model="current_input" ng-disabled="true"/>
                 </td>
             </tr>
 
@@ -35,7 +41,7 @@
                 <td><input type="button" name="operator" class="op_btn" value="7" ng-click="gather_input('7')"/></td>
                 <td><input type="button" name="operator" class="op_btn" value="8" ng-click="gather_input('8')"/></td>
                 <td><input type="button" name="operator" class="op_btn" value="9" ng-click="gather_input('9')"/></td>
-                <td><input type="button" name="operator" class="op_btn" value="÷" ng-click="gather_input('/')"/></td>
+                <td><input type="button" name="operator" class="op_btn" value="÷" ng-click="set_op('/')"/></td>
             </tr>
 
             <!--third btn row-->
@@ -45,7 +51,7 @@
                 <td><input type="button" name="operator" class="op_btn" value="4" ng-click="gather_input('4')"/></td>
                 <td><input type="button" name="operator" class="op_btn" value="5" ng-click="gather_input('5')"/></td>
                 <td><input type="button" name="operator" class="op_btn" value="6" ng-click="gather_input('6')"/></td>
-                <td><input type="button" name="operator" class="op_btn" value="×" ng-click="gather_input('*')"/></td>
+                <td><input type="button" name="operator" class="op_btn" value="×" ng-click="set_op('*')"/></td>
             </tr>
 
             <!--fourth btn row-->
@@ -55,17 +61,17 @@
                 <td><input type="button" name="operator" class="op_btn" value="1" ng-click="gather_input('1')"/></td>
                 <td><input type="button" name="operator" class="op_btn" value="2" ng-click="gather_input('2')"/></td>
                 <td><input type="button" name="operator" class="op_btn" value="3" ng-click="gather_input('3')"/></td>
-                <td><input type="button" name="operator" class="op_btn" value="-" ng-click="gather_input('-')"/></td>
+                <td><input type="button" name="operator" class="op_btn" value="-" ng-click="set_op('-')"/></td>
             </tr>
 
             <!--fifth btn row-->
             <tr>
                 <td><input type="button" name="operator" class="op_btn" value="atan" disabled/></td>
                 <td><input type="button" name="operator" class="op_btn" value="tan" /></td>
-                <td><input type="button" name="operator" class="op_btn" value="0" /></td>
-                <td><input type="button" name="operator" class="op_btn" value="." /></td>
+                <td><input type="button" name="operator" class="op_btn" value="0" ng-click="gather_input('0')"/></td>
+                <td><input type="button" name="operator" class="op_btn" value="." ng-click="gather_input('.')"/></td>
                 <td><input type="button" name="operator" class="op_btn" value="=" ng-click="evaluate()"/></td>
-                <td><input type="button" name="operator" class="op_btn" value="+" ng-click="gather_input('+')"/></td>
+                <td><input type="button" name="operator" class="op_btn" value="+" ng-click="set_op('+')"/></td>
             </tr>
         </table>
     </div>
